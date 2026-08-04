@@ -45,6 +45,9 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
 RUN chmod +x /usr/local/bin/system-update.sh && \
     systemctl enable system-update.timer
 
+RUN chmod 644 /etc/profile.d/10-environment.sh && \
+    chmod 755 /etc/scripts/bootc-welcome.sh
+
 RUN dconf update
 
 ### LINTING

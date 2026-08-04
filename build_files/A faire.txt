@@ -1,11 +1,6 @@
+- repo offline de flatpaks
+- build offline du bootc
 
-
-
-shell
-
-alias
--- et ajouter alias update system
-et update brew (scrit dans le repo git de scripts)
 
 
 
@@ -25,14 +20,6 @@ demesg
 
 
 
-
-  docker : pas justifié quand on a deja podman et en plus distrobox
-    #just                                                # Exécuteur de commandes de projet. Too-much, pas de cas d'usage réel
-   
-   
-   
-   
-   
   A installer dans brew
     htop
     kitty                       # console accelerée GPU, esthétique
@@ -68,3 +55,5 @@ demesg
     # aerc                      # client mail
     gophertube                  # chercher, regarder et télécharger des vidéos depuis youtube
     browsh                      # browser texte esthétique
+    # docker : pas justifié quand on a deja podman et en plus distrobox
+    #just                                                # Exécuteur de commandes de projet. Too-much, pas de cas d'usage réel
