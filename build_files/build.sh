@@ -5,9 +5,34 @@ set -ouex pipefail
 # Copy the contents of system_files/ of the git repo to /
 cp -avf "/ctx/system_files"/. /
 
-### Suppression des remotes flatpak par défaut (fedora, fedora-testing, flathub éventuel)
+### Suppression du remote flatpak fedora et de son service de re-création au boot
 ### Objectif : image sans aucun flatpak préconfiguré, validation du mécanisme de rebase
-rm -f /etc/flatpak/remotes.d/*.flatpakrepo
+### https://github.com/ublue-os/main/blob/main/build_files/install.sh
+dnf5 remove -y fedora-flathub-remote
+
+# rm -f /etc/flatpak/remotes.d/*.flatpakrepo
+# rm -f /usr/share/flatpak/remotes.d/*.flatpakrepo
+# flatpak remote-delete --system fedora --force || true
+
+
+### Suppression des logiciels rpm inutiles
+# dépendances vérifiées sur un système installé :
+# rpm -qa | grep -iE 'firefox|gnome-tour|gnome-software|^qt|qgnomeplatform'
+# rpm -q --whatrequires gnome-software
+# rpm -q --whatrequires qt5-qtwayland qt6-qtwayland
+
+### Suppression de logiciels RPM non désirés
+dnf5 remove -y \
+  firefox \
+  firefox-langpacks \
+  gnome-tour \
+  gnome-software \
+  gnome-software-rpm-ostree \
+  qt5-qtbase \
+  qt6-qtbase
+
+
+
 
 ### Install packages
 
@@ -29,3 +54,10 @@ rm -f /etc/flatpak/remotes.d/*.flatpakrepo
 #### Example for enabling a System Unit File
 
 # systemctl enable podman.socket
+
+
+
+### Ajout de Flathub (statique, prêt à l'emploi si besoin plus tard)
+### https://github.com/ublue-os/main/blob/main/build_files/install.sh
+mkdir -p /etc/flatpak/remotes.d/
+curl --retry 3 -Lo /etc/flatpak/remotes.d/flathub.flatpakrepo https://dl.flathub.org/repo/flathub.flatpakrepo

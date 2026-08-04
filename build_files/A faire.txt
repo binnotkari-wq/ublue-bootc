@@ -1,0 +1,110 @@
+OK le système est sans aucun flatpak.
+
+Par contre le repo fedora est toujours là, meme si les flatpaks ne sont pas installés.
+En fait il est configuré dans /var/lib/flatpak/repo/config. Est-ce qu'on peut executer une commande flatpak dans le job de build.sh ?
+
+
+Logiciels rpm à supprimer :
+- firefox
+- visite guidée
+- logiciels
+- *qt*
+
+
+Logiciels CLI déjà installés
+git
+wget
+pciutils 
+iw
+usbutils
+compsize
+libnotify
+hunspell
+tree                        # visualisation d'arborence (peut être redirigé ver sune sortie fichier texte)
+python314
+podman
+
+Logiciels CLI à installer
+
+    distrobox   
+    bat                         # better cat. Visualisation esthetique
+    powertop                            # Vital pour optimiser la batterie
+    lm_sensors                          # Surveillance des températures
+    stress-ng                           # Pour tester la stabilité du Ryzen
+    s-tui                               # Monitoring CPU en temps réel
+    libva-utils                         # Permet de lancer 'vainfo' pour tester l'accélération vidéo
+    shellcheck                          # contrôle de syntaxe scripts bash
+    mdcat                               # Lecture de documentation Markdown
+    dialog                              # outil boites de dialogue scripts
+    zenity                              # outil boites de dialogue scripts (GTK)
+    kiwix-tools                         # (3.0 MiB download, 12.6 MiB unpacked) wikipedia offline
+    llama-cpp-vulkan           
+    aria2
+    yt-dlp                      # téléchargement de fichiers sur youtube (complet, juste audio, etc...)
+
+    mc
+    #just                                                # Exécuteur de commandes de projet. Too-much, pas de cas d'usage réel
+    btop                        # Version "esthétique" de htop (confort visuel)
+
+
+  docker?
+
+
+Des equivalents dans fedora ?
+  security.unprivilegedUsernsClone = true;
+  virtualisation.libvirtd.enable = true;
+  virtualisation.spiceUSBRedirection.enable = true;
+   
+   
+   
+   
+   
+  A installer dans brew
+    htop
+    zoxide # cd intelligent. Commencer par lancer zoxide add "le répertoire à intégrer dans la base de données". Puis, z remplace cd (pas immédiat, il faut déjà se promener un peu dans les dossiers)
+    kitty                       # console accelerée GPU, esthétique
+    fd                          # recherche
+    fzf                         # recherche intelligente
+    tldr                        # astuces et conseil d'utilisation des logiciels
+    dust                        # analyse graphique de l'espace disque
+    duf                         # Visualisation rapide de l'espace disque
+    # stow                      # Gestion des dotfiles personnels (inutile lorsqu'on déclare les préférences en .nix)
+    # cliphist                    # Visualisation de l'historique du presse-papier. Mais ne sert pas trop à grand chose.
+    # atuin                     # analyse de l'historique bash. Mais par rappor à la confidentialité ....non (synchro de l'historique en ligne, etc...)
+    ffmpeg
+    groff
+    imagemagick
+    pandoc
+    nerd-fonts.jetbrains-mono
+    # superfile                 # gestionnaire de fichiers esthétique
+    # ranger                    # gestionnaire de fichiers esthétique
+    lynx                        # browser texte basique
+    w3m                         # navigateur internet
+    zellij                      # multiplexeur de terminal
+    yazi                       # gestionnaire de fichiers TUI modulaire
+    yaziPlugins.mount
+    yaziPlugins.chmod
+    yaziPlugins.compress
+    yaziPlugins.full-border
+    yaziPlugins.recycle-bin
+    htop                        # Le classique immanquable
+    mplayer                     # nécessaire à pyradio
+    pyradio                     # radio web
+    newsboat                    # lecteur RSS
+    television                  # interface TUI à fd
+    # tmux                      # multiplexeur de terminal
+    md-tui                      # visualisateur Markdown. Le plus agréable. Permet d'editer, de rechercher...mais parfois n'interprète pas bien de md.
+    musikcube                   # Lecteur mp3 esthétique
+    # aerc                      # client mail
+    gophertube                  # chercher, regarder et télécharger des vidéos depuis youtube
+    browsh                      # browser texte esthétique
+    
+    
+    
+    
+    
+    
+    Flatpaks et rpm : les applications GUI ont tous la correction orthographique activée. Pas la peine de rajouter des dictionnaires.
+    
+    # hunspellDicts.fr-any                # dictionaire français, utilisé à l'échelle du système
+    # hunspellDicts.fr-moderne            # dictionnaire francais, utilisé à l'échelle du système
