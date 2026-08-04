@@ -1,6 +1,12 @@
 
 
-OK le système est sans aucun flatpak.
+
+shell
+
+alias
+-- et ajouter alias update system
+et update brew (scrit dans le repo git de scripts)
+
 
 
 resoudre !

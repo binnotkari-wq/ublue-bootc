@@ -37,6 +37,16 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=tmpfs,dst=/tmp \
     /ctx/build.sh
 
+
+### build.sh doit avoir été éxécuté
+
+
+### Application des permissions d'exécution sur les scrits et services perso
+RUN chmod +x /usr/local/bin/system-update.sh && \
+    systemctl enable system-update.timer
+
+RUN dconf update
+
 ### LINTING
 ## Verify final image and contents are correct.
 RUN bootc container lint

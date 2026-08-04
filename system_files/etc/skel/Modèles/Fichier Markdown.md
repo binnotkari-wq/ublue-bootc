@@ -1,0 +1,1 @@
+/etc/static/skel/Modèles/Fichier Markdown.md
