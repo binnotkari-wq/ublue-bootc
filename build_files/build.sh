@@ -5,6 +5,9 @@ set -ouex pipefail
 # Copy the contents of system_files/ of the git repo to /
 cp -avf "/ctx/system_files"/. /
 
+### Exécution des tweaks séparés
+/ctx/tweaks.sh
+
 ### Suppression du remote flatpak fedora et de son service de re-création au boot
 ### Objectif : image sans aucun flatpak préconfiguré, validation du mécanisme de rebase
 ### https://github.com/ublue-os/main/blob/main/build_files/install.sh
@@ -29,6 +32,14 @@ dnf5 remove -y \
   qt5-qtbase \
   qt6-qtbase
 
+### Suppression d'Orca et de la synthèse vocale (non utilisés)
+dnf5 remove -y \
+  orca \
+  speech-dispatcher \
+  speech-dispatcher-espeak-ng \
+  speech-dispatcher-libs \
+  speech-dispatcher-utils \
+  espeak-ng
 
 ### Suppression des extensions GNOME Shell par défaut et de la session classique associée
 ### rpm -qa | grep -iE 'gnome-shell-extension*'
@@ -40,10 +51,6 @@ dnf5 remove -y \
   gnome-shell-extension-places-menu \
   gnome-shell-extension-window-list \
   gnome-shell-extension-background-logo
-
-
-
-
 
 ### Services système : désactivation classique
 systemctl disable \

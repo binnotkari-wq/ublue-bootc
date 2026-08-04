@@ -1,14 +1,22 @@
+
+
 OK le système est sans aucun flatpak.
 
-Par contre le repo fedora est toujours là, meme si les flatpaks ne sont pas installés.
-En fait il est configuré dans /var/lib/flatpak/repo/config. Est-ce qu'on peut executer une commande flatpak dans le job de build.sh ?
+
+resoudre !
+build github
+Lint warning: nonempty-run-tmp: Found content in runtime-only directories (/run, /tmp):
+  /run/dnf
+
+Lint warning: var-tmpfiles: Found non-directory/non-symlink files in /var:
+  var/lib/dnf/system-repo.lock
 
 
-Logiciels rpm à supprimer :
-- firefox
-- visite guidée
-- logiciels
-- *qt*
+## Sans conséquence, ce n'est qu'un quirck
+demesg
+[   98.756929] systemd[1]: systemd-remount-fs.service: Failed with result 'exit-code'.
+[   98.757461] systemd[1]: Failed to start systemd-remount-fs.service - Remount Root and Kernel File Systems.
+
 
 
 Logiciels CLI déjà installés
