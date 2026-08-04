@@ -6,9 +6,9 @@ set -ouex pipefail
 cp -avf "/ctx/system_files"/. /
 
 ### Exécution des modules (conserver cet ordre)
-/ctx/trimming.sh
-/ctx/tweaks.sh
-/ctx/softwares.sh
+#/ctx/trimming.sh
+#/ctx/tweaks.sh
+#/ctx/softwares.sh
 
 ### Nettoyage final
 dnf5 autoremove -y
