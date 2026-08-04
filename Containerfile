@@ -38,7 +38,7 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     /ctx/build.sh
 
 
-### build.sh doit avoir été éxécuté
+### build.sh doit avoir été éxécuté pour les RUN suivants.
 
 
 ### Application des permissions d'exécution sur les scrits et services perso
