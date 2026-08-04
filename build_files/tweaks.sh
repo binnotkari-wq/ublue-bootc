@@ -25,10 +25,10 @@ EOF
 ### Kernel arg : compression btrfs forcée en zstd:3 (test isolé, sans toucher subvol=root)
 mkdir -p /usr/lib/bootc/kargs.d
 cat > /usr/lib/bootc/kargs.d/10-btrfs-compress.toml << 'EOF'
-kargs = ["rootflags=compress-force=zstd:3"]
+kargs = ["rootflags=subvol=root,compress-force=zstd:3"]
 EOF
 
-# Fedora type Atomic dispose déjà des optimisations suivantes :
+
 ### Intégré par défaut par fédora :
 # zram en lzo-rle (on veut zstd)
 # compression btrfs zstd niveau 1 (on veut niveau 3)

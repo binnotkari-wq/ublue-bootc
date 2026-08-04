@@ -19,49 +19,9 @@ demesg
 
 
 
-Logiciels CLI déjà installés
-git
-wget
-pciutils 
-iw
-usbutils
-compsize
-libnotify
-hunspell
-tree                        # visualisation d'arborence (peut être redirigé ver sune sortie fichier texte)
-python314
-podman
 
-Logiciels CLI à installer
-
-    distrobox   
-    bat                         # better cat. Visualisation esthetique
-    powertop                            # Vital pour optimiser la batterie
-    lm_sensors                          # Surveillance des températures
-    stress-ng                           # Pour tester la stabilité du Ryzen
-    s-tui                               # Monitoring CPU en temps réel
-    libva-utils                         # Permet de lancer 'vainfo' pour tester l'accélération vidéo
-    shellcheck                          # contrôle de syntaxe scripts bash
-    mdcat                               # Lecture de documentation Markdown
-    dialog                              # outil boites de dialogue scripts
-    zenity                              # outil boites de dialogue scripts (GTK)
-    kiwix-tools                         # (3.0 MiB download, 12.6 MiB unpacked) wikipedia offline
-    llama-cpp-vulkan           
-    aria2
-    yt-dlp                      # téléchargement de fichiers sur youtube (complet, juste audio, etc...)
-
-    mc
+  docker : pas justifié quand on a deja podman et en plus distrobox
     #just                                                # Exécuteur de commandes de projet. Too-much, pas de cas d'usage réel
-    btop                        # Version "esthétique" de htop (confort visuel)
-
-
-  docker?
-
-
-Des equivalents dans fedora ?
-  security.unprivilegedUsernsClone = true;
-  virtualisation.libvirtd.enable = true;
-  virtualisation.spiceUSBRedirection.enable = true;
    
    
    
@@ -69,11 +29,7 @@ Des equivalents dans fedora ?
    
   A installer dans brew
     htop
-    zoxide # cd intelligent. Commencer par lancer zoxide add "le répertoire à intégrer dans la base de données". Puis, z remplace cd (pas immédiat, il faut déjà se promener un peu dans les dossiers)
     kitty                       # console accelerée GPU, esthétique
-    fd                          # recherche
-    fzf                         # recherche intelligente
-    tldr                        # astuces et conseil d'utilisation des logiciels
     dust                        # analyse graphique de l'espace disque
     duf                         # Visualisation rapide de l'espace disque
     # stow                      # Gestion des dotfiles personnels (inutile lorsqu'on déclare les préférences en .nix)
@@ -106,13 +62,3 @@ Des equivalents dans fedora ?
     # aerc                      # client mail
     gophertube                  # chercher, regarder et télécharger des vidéos depuis youtube
     browsh                      # browser texte esthétique
-    
-    
-    
-    
-    
-    
-    Flatpaks et rpm : les applications GUI ont tous la correction orthographique activée. Pas la peine de rajouter des dictionnaires.
-    
-    # hunspellDicts.fr-any                # dictionaire français, utilisé à l'échelle du système
-    # hunspellDicts.fr-moderne            # dictionnaire francais, utilisé à l'échelle du système
