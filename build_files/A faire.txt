@@ -1,6 +1,34 @@
-- repo offline de flatpaks
-- build offline du bootc
+image :
+integrer brew
+intégrer steam (si diff de perfs en faveur des rpm, et si il est impossible d'avoir une session gamescope en flatpak)
 
+- repo offline de flatpaks
+
+
+=======================================
+# build offline du bootc
+
+# Aller dans le repo
+cd /home/benoit/Git/ublue-bootc
+
+# construire l'image :
+podman build -t ublue-bootc:latest .
+
+# construire le container :
+skopeo copy containers-storage:localhost/ublue-bootc:latest \
+  oci:/cargo/local_cache/bootc-images/ublue-bootc_$(date +%Y%m%d-%H%M%S).oci
+  
+# intégration sur l'hôte :
+  sudo bootc switch --transport oci /cargo/local_cache/bootc-images/ublue-bootc_"versionsouhaitée".oci
+=======================================
+
+
+- on build en local
+- mise à dispo de l'image bootc : on peut soit faire un repo local, soit mettre sur clé usb 
+
+pour flathub
+https://github.com/ublue-os/main/blob/main/sys_files/usr/lib/systemd/system/flatpak-add-flathub-repos.service
+https://github.com/ublue-os/main/blob/main/sys_files/usr/lib/dracut/dracut.conf.d/10-compression.conf
 
 Les preferences ne s'appliquent pas lorsqu'elles fonc partie d'un upgrade, et que l'utilisateur a déjà modifié des réglages sur ces preferences.
 

@@ -45,6 +45,9 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
 RUN chmod +x /usr/bin/system-update.sh && \
     systemctl enable system-update.timer
 
+# Activation du service d'installation de Brew
+RUN systemctl enable install-homebrew.service
+
 RUN chmod 644 /etc/profile.d/10-environment.sh && \
     chmod 755 /etc/scripts/bootc-welcome.sh
 
