@@ -1,11 +1,13 @@
-[customizations.locale]
-# Anaconda sera lancé en français, la langue de l'image sera le français
+[customizations.installer.kickstart]
+contents = """
+# Configuration de la localisation pour l'installateur
 lang fr_FR.UTF-8
 keyboard fr
 timezone Europe/Paris
 
-[customizations.installer.kickstart]
-contents = """
+# Interface graphique
+graphical
+
 %post
 bootc switch --mutate-in-place --transport registry ghcr.io/binnotkari-wq/ublue-bootc:latest
 %end
@@ -16,7 +18,6 @@ enable = [
   "org.fedoraproject.Anaconda.Modules.Storage",
   "org.fedoraproject.Anaconda.Modules.Runtime",
   "org.fedoraproject.Anaconda.Modules.Users",
-  # Choix de la localisation, au besoin
   "org.fedoraproject.Anaconda.Modules.Localization",
   "org.fedoraproject.Anaconda.Modules.Timezone",
   "org.fedoraproject.Anaconda.Modules.Network",
