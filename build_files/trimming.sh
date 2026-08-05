@@ -12,11 +12,11 @@ dnf5 remove -y fedora-flathub-remote
 # rpm -qa | grep -iE 'firefox|gnome-tour|gnome-software|^qt|qgnomeplatform'
 # rpm -q --whatrequires gnome-software
 # rpm -q --whatrequires qt5-qtwayland qt6-qtwayland
+# firefox est conservé en natif. La version flatak est limitée, notamment au
+# niveau des policies.
+# firefox \
+# firefox-langpacks \
 dnf5 remove -y \
-  # firefox est conservé en natif. La version flatak est limitée, notamment au
-  # niveau des policies.
-  # firefox \
-  # firefox-langpacks \
   gnome-tour \
   gnome-software \
   gnome-software-rpm-ostree \
