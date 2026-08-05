@@ -61,5 +61,8 @@ systemctl --global mask \
   evolution-calendar-factory.service \
   evolution-alarm-notify.service \
   evolution-source-registry.service \
+  evolution-user-prompter.service \
   org.gnome.SettingsDaemon.Smartcard.service \
-  org.gnome.SettingsDaemon.Wwan.service
+  org.gnome.SettingsDaemon.Smartcard.target \
+  org.gnome.SettingsDaemon.Wwan.service \
+  org.gnome.SettingsDaemon.Wwan.target

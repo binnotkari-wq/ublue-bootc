@@ -16,7 +16,6 @@ alias bkp='$HOME/Git/scripts/backup.sh'
 alias bh='$HOME/Git/scripts/bash-history-export.sh'
 alias bkp='$HOME/Git/scripts/backup.sh'
 alias bh='$HOME/Git/scripts/bash-history-export.sh'
-alias bu='$HOME/Git/scripts/brew-update.sh'
 alias gs='$HOME/Git/scripts/git-sync.sh'
 
 alias gemma='llama-cli --model "/cargo/local_cache/LLM/gemma-3-4b-it-Q8_0.gguf" --conversation --system-prompt "Tu es un assistant compréhensif pour la vie quotidienne : ménage, jardin, travaux, mécanique." --no-mmap --ctx-size 4096'

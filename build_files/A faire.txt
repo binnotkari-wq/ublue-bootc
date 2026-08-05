@@ -4,16 +4,53 @@ intégrer steam (si diff de perfs en faveur des rpm, et si il est impossible d'a
 
 - repo offline de flatpaks
 
+===================================
+infos générales
+
+Les builds sont dans : 
+/var/lib/containers/storage
+
+
+
+
+Ce que fait réellement bootc-image-builder sous le capot
+
+Pour transformer une image de conteneur en ISO d'installation autonome, l'outil exécute plusieurs étapes gourmandes en processeur et en entrées/sorties disque :
+
+    Extraction et conversion du système de fichiers
+    Il ne se contente pas de copier le conteneur. Il extrait toutes les couches (layers), reconstitue l'arborescence complète et formate une vraie partition disque virtuelle (dans votre cas, en btrfs).
+
+    Génération d'un initramfs dédié (Dracut)
+    Il doit compiler un noyau et un système de démarrage temporaire (initramfs) capable de détecter le matériel de n'importe quel PC au boot de l'ISO. C'est l'étape qui génère souvent les avertissements grub2-probe que vous avez vus passer.
+
+    Création de l'image OSTree / Native Container
+    Il prépare la structure ostree ou le magasin de conteneurs local qui sera directement copié sur le disque dur de la machine cible lors de l'installation.
+
+    Compression extrême (La partie la plus lente)
+    L'ISO utilise un système de fichiers compressé en lecture seule (SquashFS). La compression de plusieurs gigaoctets de données pour faire tenir l'OS et l'installeur Anaconda sur une ISO prend un temps considérable et sollicite énormément le processeur.
+
+Pourquoi c'est beaucoup plus long que podman build ?
+
+    podman build ne fait qu'ajouter des couches légères et mettre à jour du texte/binaires dans un cache local.
+
+    bootc-image-builder fabrique une véritable image disque complète, initialise une table de partition (MBR/GPT), installe et configure GRUB, et compresse l'ensemble du système de fichiers.
+
+
+
 
 =======================================
 # build offline du bootc
 
-# Aller dans le repo
+# Se placer dans le repo
 cd /home/benoit/Git/ublue-bootc
 
 # construire l'image :
-podman build -t ublue-bootc:latest .
+sudo podman build -t ublue-bootc:latest .
+=======================================
 
+
+=======================================
+# build offline de l'image
 # construire le container :
 skopeo copy containers-storage:localhost/ublue-bootc:latest \
   oci:/cargo/local_cache/bootc-images/ublue-bootc_$(date +%Y%m%d-%H%M%S).oci
@@ -23,12 +60,131 @@ skopeo copy containers-storage:localhost/ublue-bootc:latest \
 =======================================
 
 
-- on build en local
-- mise à dispo de l'image bootc : on peut soit faire un repo local, soit mettre sur clé usb 
+
+
+=======================================
+# build offline de l'iso
+
+sudo podman run \
+  --rm \
+  --privileged \
+  --pull=newer \
+  -v /var/lib/containers/storage:/var/lib/containers/storage \
+  -v /cargo/local_cache/bootc-isos:/output \
+  quay.io/centos-bootc/bootc-image-builder:latest \
+  --type iso \
+  --rootfs btrfs \
+  localhost/ublue-bootc:latest
+
+
+
+========================================
+*Si trop de problèmes : garder une image fedora our l'install initiale, et ensuite bootc switch
+
+PROBLEMES AU BOOT
+quelques messages d'erreur :
+
+
+PROBELEMES ANACONDA
+si au tout debut je n'agis pas (selection d'un des modules) au bout de 2 ou 3 secondes anaconda lance de lui meme l'installation
+l'interface de anaconda est toujours en anglais, et l'icone de selection d'un autre clavier ne fait rien
+
+
+PROBLEME OS
+En anglais
+brew n'est pas installé
+secure boot pas activé (la faut à la VM ?)
+Les param btrfs sont mal intégrés
+[    0.029525] Kernel command line: BOOT_IMAGE=(hd0,gpt2)/ostree/default-e2796fa45b9047f4f6641af6320dfb1cae5d3bb4610a51afd4f573555e5afd11/vmlinuz-7.1.5-201.fc44.x86_64 ostree=/ostree/boot.0/default/e2796fa45b9047f4f6641af6320dfb1cae5d3bb4610a51afd4f573555e5afd11/0 rootflags=subvol=root,compress-force=zstd:3 rd.luks.uuid=luks-66c822b3-7d96-40e1-bda9-220eb302b1c9 rhgb quiet root=UUID=81127e0b-ddf9-4347-8f41-3366080a16d1 vconsole.keymap= rootflags=subvol=root rw
+[    0.029651] Unknown kernel command line parameters "rhgb ostree=/ostree/boot.0/default/e2796fa45b9047f4f6641af6320dfb1cae5d3bb4610a51afd4f573555e5afd11/0", will be passed to user space.
+
+
+
+[benoit@fedora:/home]$ systemctl | grep failed
+● mcelog.service                                                                            loaded failed     failed       Machine Check Exception Logging Daemon
+● systemd-remount-fs.service                                                                loaded failed     failed       Remount Root and Kernel File Systems
+[benoit@fedora:/home]$ systemctl | grep system-update
+system-update.timer                                                                       loaded active     waiting      Déclenchement hebdomadaire de system-update.service
+[benoit@fedora:/home]$ 
+
+
+
+
+
+
+
+.
+├── artifacthub-repo.yml
+├── build_files
+│   ├── A faire.txt
+│   ├── build.sh
+│   ├── softwares.sh                                            # OK
+│   ├── trimming.sh                                             # OK
+│   └── tweaks.sh
+├── Containerfile                                               # OK
+├── cosign.key
+├── cosign.pub
+├── disk_config
+│   ├── disk.toml                                               # OK
+│   ├── iso-gnome.toml                                          # problème anaconda ?
+│   └── iso-kde.toml
+├── image-template.env
+├── Justfile
+├── LICENSE
+├── README.md
+└── system_files
+    ├── etc
+    │   ├── dconf
+    │   │   ├── db
+    │   │   │   └── local.d
+    │   │   │       └── 00-defaults                             # OK
+    │   │   └── profile
+    │   │       └── user                                        # OK
+    │   ├── firefox
+    │   │   └── policies
+    │   │       └── policies.json                               # OK
+    │   ├── profile.d
+    │   │   ├── 10-environment.sh                               # OK
+    │   ├── scripts
+    │   │   └── bootc-welcome.sh                                # OK
+    │   ├── skel
+    │   │   └── Modèles
+    │   │       ├── Fichier Markdown.md                         # OK
+    │   │       ├── Fichier texte.txt                           # OK
+    │   │       └── Script.sh                                   # OK
+    │   └── systemd
+    │       └── system
+    │           ├── system-update.service                       # OK
+    │           └── system-update.timer                         # OK
+    └── usr
+        └── bin
+            └── system-update.sh                                # OK
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 pour flathub
 https://github.com/ublue-os/main/blob/main/sys_files/usr/lib/systemd/system/flatpak-add-flathub-repos.service
-https://github.com/ublue-os/main/blob/main/sys_files/usr/lib/dracut/dracut.conf.d/10-compression.conf
+
 
 Les preferences ne s'appliquent pas lorsqu'elles fonc partie d'un upgrade, et que l'utilisateur a déjà modifié des réglages sur ces preferences.
 
