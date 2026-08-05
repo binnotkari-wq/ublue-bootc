@@ -2,6 +2,7 @@
 - build offline du bootc
 
 
+Les preferences ne s'appliquent pas lorsqu'elles fonc partie d'un upgrade, et que l'utilisateur a déjà modifié des réglages sur ces preferences.
 
 
 resoudre !
