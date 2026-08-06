@@ -6,6 +6,7 @@ set -ouex pipefail
 ### Objectif : image sans aucun flatpak préconfiguré, validation du mécanisme de rebase
 ### https://github.com/ublue-os/main/blob/main/build_files/install.sh
 dnf5 remove -y fedora-flathub-remote
+flatpak remote-delete --system fedora --force || true
 
 ### Suppression de logiciels RPM non désirés
 # dépendances vérifiées sur un système installé :

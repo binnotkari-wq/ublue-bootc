@@ -31,11 +31,11 @@ RUN --mount=type=cache,dst=/var/cache \
     /usr/bin/systemctl preset brew-upgrade.timer
 
 ### Application des permissions d'exécution sur les scripts et services perso
-RUN chmod +x /usr/bin/system-update.sh && \
-    systemctl enable system-update.timer
-
-RUN chmod 644 /etc/profile.d/10-environment.sh && \
+RUN chmod 755 /etc/scripts/system-update.sh && \
     chmod 755 /etc/scripts/bootc-welcome.sh
+    
+RUN chmod 644 /etc/profile.d/10-environment.sh && \
+    chmod 755 /etc/skel/Script.sh
 
 RUN dconf update
 

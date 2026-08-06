@@ -1,17 +1,105 @@
+Erreur spécifique à la customisation :
+
+
+BUILD GITHUB
+Lint warning: nonempty-run-tmp: Found content in runtime-only directories (/run, /tmp):
+  /run/dnf
+
+Lint warning: var-tmpfiles: Found non-directory/non-symlink files in /var:
+  var/lib/dnf/system-repo.lock
+
+---> des solutions existent peut etre chez universal blue
+
+
+PROBLEMES AU BOOT ISO
+Au démarrage de l'iso (uniquement l'iso, une fois le système installé, ces erreurs n'existent pas)
+dracut-cmdline[323]: Warning: .buildstamp missing
+dracut-pre-udev[707]: modprobe: ERROR: could not insert 'edd' : No such device
+
+
+
+PROBLEMES OS - TOUS EN UPSTREAM FEDORA (Erreurs constatées également sur un fedora 44 d'origine)
+secure boot pas activé (la faute à la VM ?)
+
+Services failed (systemctl --failed) :
+● mcelog.service
+● systemd-remount-fs.service 
+
+toutes les erreurs systemd-remount-fs exit status 32 (à ignoer, c'est la nature meme de la racine rpm ostree)
+toutes les erreurs systemd-tmpfiles sur /home /srv /root (à ignoer, c'est la nature meme de la racine rpm ostree)
+erreur gdm-password][2333]: gkr-pam
+Les erreurs systemd-remount-fs sont aussi signalées pendant le build sur github (sans echec)
+
+Pour info, Fedora fait aussi d'autres erreurs absentes de l'image bootc perso :
+- systemd-tmpfiles (Failed to resolve group 'tss')
+- dbus-broker-launch: Ignoring duplicate name (conséquence de la préinstallation des flatpak qui cherchent dbus oas encore actif)
+- fedora systemd: Failed to start app-gnome-vmware
+
+
+
+ETAT DE VALIDATION
+
+.
+├── artifacthub-repo.yml
+├── build_files
+│   ├── A faire.txt                                             # NC
+│   ├── build.sh                                                # OK
+│   ├── softwares.sh                                            # OK
+│   ├── trimming.sh                                             # OK
+│   └── tweaks.sh                                               # OK
+├── Containerfile                                               # OK
+├── cosign.key                                                  # NC
+├── cosign.pub                                                  # NC
+├── disk_config
+│   ├── disk.toml                                               # OK
+│   ├── iso-gnome.toml                                          # OK
+│   └── iso-kde.toml                                            # NC
+├── image-template.env
+├── Justfile                                                    # NC
+├── LICENSE                                                     # NC
+├── README.md                                                   # NC
+└── system_files         ######################################## OK
+    ├── etc
+    │   ├── dconf
+    │   │   ├── db
+    │   │   │   └── local.d
+    │   │   │       └── 00-defaults                             # NOK syntaxe dash to panel position en haut
+    │   │   └── profile
+    │   │       └── user                                        # OK
+    │   ├── firefox
+    │   │   └── policies
+    │   │       └── policies.json                               # OK
+    │   ├── profile.d
+    │   │   └── 10-environment.sh                               # NOK intégrer alias pour system-update.sh 
+    │   ├── scripts
+    │   │   ├── bootc-welcome.sh                                # OK
+    │   │   └── system-update.sh                                # OK
+    │   └── skel
+    │       └── Modèles
+    │           ├── Fichier Markdown.md                         # OK
+    │           ├── Fichier texte.txt                           # OK
+    │           └── Script.sh                                   # OK
+    └── usr
+
+
+
 image :
-integrer brew
+A modifier, en date du 06/08/2026
+Erreur de syntaxe pour la position de dash to panel, corrigé, en attente rebuild pour tester
+Assigne un alias pour le script d'update system
+
+
+
 intégrer steam (si diff de perfs en faveur des rpm, et si il est impossible d'avoir une session gamescope en flatpak)
 
-- repo offline de flatpaks
 
+
+
+
+
+BUILD LOCAL
 ===================================
 infos générales
-
-Les builds sont dans : 
-/var/lib/containers/storage
-
-
-
 
 Ce que fait réellement bootc-image-builder sous le capot
 
@@ -64,101 +152,53 @@ skopeo copy containers-storage:localhost/ublue-bootc:latest \
 
 =======================================
 # build offline de l'iso
-
-sudo podman run \
-  --rm \
-  --privileged \
-  --pull=newer \
-  -v /var/lib/containers/storage:/var/lib/containers/storage \
-  -v /cargo/local_cache/bootc-isos:/output \
-  quay.io/centos-bootc/bootc-image-builder:latest \
-  --type iso \
-  --rootfs btrfs \
-  localhost/ublue-bootc:latest
-
-
+Tout simlement avec le script fait par Gemini
 
 ========================================
-*Si trop de problèmes : garder une image fedora our l'install initiale, et ensuite bootc switch
-
-PROBLEMES AU BOOT
-quelques messages d'erreur :
-
-
-PROBELEMES ANACONDA
-si au tout debut je n'agis pas (selection d'un des modules) au bout de 2 ou 3 secondes anaconda lance de lui meme l'installation
-l'interface de anaconda est toujours en anglais, et l'icone de selection d'un autre clavier ne fait rien
-
-
-PROBLEME OS
-En anglais
-brew n'est pas installé
-secure boot pas activé (la faut à la VM ?)
-Les param btrfs sont mal intégrés
-[    0.029525] Kernel command line: BOOT_IMAGE=(hd0,gpt2)/ostree/default-e2796fa45b9047f4f6641af6320dfb1cae5d3bb4610a51afd4f573555e5afd11/vmlinuz-7.1.5-201.fc44.x86_64 ostree=/ostree/boot.0/default/e2796fa45b9047f4f6641af6320dfb1cae5d3bb4610a51afd4f573555e5afd11/0 rootflags=subvol=root,compress-force=zstd:3 rd.luks.uuid=luks-66c822b3-7d96-40e1-bda9-220eb302b1c9 rhgb quiet root=UUID=81127e0b-ddf9-4347-8f41-3366080a16d1 vconsole.keymap= rootflags=subvol=root rw
-[    0.029651] Unknown kernel command line parameters "rhgb ostree=/ostree/boot.0/default/e2796fa45b9047f4f6641af6320dfb1cae5d3bb4610a51afd4f573555e5afd11/0", will be passed to user space.
-
-
-
-[benoit@fedora:/home]$ systemctl | grep failed
-● mcelog.service                                                                            loaded failed     failed       Machine Check Exception Logging Daemon
-● systemd-remount-fs.service                                                                loaded failed     failed       Remount Root and Kernel File Systems
-[benoit@fedora:/home]$ systemctl | grep system-update
-system-update.timer                                                                       loaded active     waiting      Déclenchement hebdomadaire de system-update.service
-[benoit@fedora:/home]$ 
-
-
-
-
-
 
 
 .
 ├── artifacthub-repo.yml
 ├── build_files
-│   ├── A faire.txt
-│   ├── build.sh
+│   ├── A faire.txt                                             # NC
+│   ├── build.sh                                                # OK
 │   ├── softwares.sh                                            # OK
 │   ├── trimming.sh                                             # OK
-│   └── tweaks.sh
+│   └── tweaks.sh                                               # OK
 ├── Containerfile                                               # OK
-├── cosign.key
-├── cosign.pub
+├── cosign.key                                                  # NC
+├── cosign.pub                                                  # NC
 ├── disk_config
 │   ├── disk.toml                                               # OK
-│   ├── iso-gnome.toml                                          # problème anaconda ?
-│   └── iso-kde.toml
+│   ├── iso-gnome.toml                                          # OK
+│   └── iso-kde.toml                                            # NC
 ├── image-template.env
-├── Justfile
-├── LICENSE
-├── README.md
-└── system_files
+├── Justfile                                                    # NC
+├── LICENSE                                                     # NC
+├── README.md                                                   # NC
+└── system_files         ######################################## OK
     ├── etc
     │   ├── dconf
     │   │   ├── db
     │   │   │   └── local.d
-    │   │   │       └── 00-defaults                             # OK
+    │   │   │       └── 00-defaults                             # NOK syntaxe dash to panel position en haut
     │   │   └── profile
     │   │       └── user                                        # OK
     │   ├── firefox
     │   │   └── policies
     │   │       └── policies.json                               # OK
     │   ├── profile.d
-    │   │   ├── 10-environment.sh                               # OK
+    │   │   └── 10-environment.sh                               # OK
     │   ├── scripts
-    │   │   └── bootc-welcome.sh                                # OK
-    │   ├── skel
-    │   │   └── Modèles
-    │   │       ├── Fichier Markdown.md                         # OK
-    │   │       ├── Fichier texte.txt                           # OK
-    │   │       └── Script.sh                                   # OK
-    │   └── systemd
-    │       └── system
-    │           ├── system-update.service                       # OK
-    │           └── system-update.timer                         # OK
+    │   │   ├── bootc-welcome.sh                                # OK
+    │   │   └── system-update.sh 
+    │   └── skel
+    │       └── Modèles
+    │           ├── Fichier Markdown.md                         # OK
+    │           ├── Fichier texte.txt                           # OK
+    │           └── Script.sh                                   # OK
     └── usr
-        └── bin
-            └── system-update.sh                                # OK
+
 
 
 
@@ -185,24 +225,7 @@ system-update.timer                                                             
 pour flathub
 https://github.com/ublue-os/main/blob/main/sys_files/usr/lib/systemd/system/flatpak-add-flathub-repos.service
 
-
 Les preferences ne s'appliquent pas lorsqu'elles fonc partie d'un upgrade, et que l'utilisateur a déjà modifié des réglages sur ces preferences.
-
-
-resoudre !
-build github
-Lint warning: nonempty-run-tmp: Found content in runtime-only directories (/run, /tmp):
-  /run/dnf
-
-Lint warning: var-tmpfiles: Found non-directory/non-symlink files in /var:
-  var/lib/dnf/system-repo.lock
-
-
-## Sans conséquence, ce n'est qu'un quirck
-demesg
-[   98.756929] systemd[1]: systemd-remount-fs.service: Failed with result 'exit-code'.
-[   98.757461] systemd[1]: Failed to start systemd-remount-fs.service - Remount Root and Kernel File Systems.
-
 
 
   A installer dans brew

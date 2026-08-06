@@ -22,7 +22,10 @@ swap-priority=100
 zram-size=100 / 100 * ram
 EOF
 
-### Kernel arg : compression btrfs forcée en zstd:3 (test isolé, sans toucher subvol=root)
+### Kernel arg : compression btrfs forcée en zstd:3 (zstd:1 par défaut)
+### les options kargs ne remplacent pas les existantes, mais si ajoutent sans fusion
+### Cela fait un doublon de kargs qui est sans conséquence compress-force=zstd:3
+### est bien actif (test sur fichier avant et apres l'ajout des kaargs
 mkdir -p /usr/lib/bootc/kargs.d
 cat > /usr/lib/bootc/kargs.d/10-btrfs-compress.toml << 'EOF'
 kargs = ["rootflags=subvol=root,compress-force=zstd:3"]
