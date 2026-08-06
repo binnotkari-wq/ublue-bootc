@@ -11,7 +11,7 @@ Lint warning: var-tmpfiles: Found non-directory/non-symlink files in /var:
 ---> des solutions existent peut etre chez universal blue
 
 
-PROBLEMES AU BOOT ISO
+PROBLEMES AU BOOT ISO (bootc custom, ou boots silverblue sans modif de l'image
 Au démarrage de l'iso (uniquement l'iso, une fois le système installé, ces erreurs n'existent pas)
 dracut-cmdline[323]: Warning: .buildstamp missing
 dracut-pre-udev[707]: modprobe: ERROR: could not insert 'edd' : No such device
@@ -88,6 +88,14 @@ A modifier, en date du 06/08/2026
 Erreur de syntaxe pour la position de dash to panel, corrigé, en attente rebuild pour tester
 Assigne un alias pour le script d'update system
 
+# https://github.com/ublue-os/main/blob/main/build_files/post-install.sh
+# Add linuxbrew to the list of paths usable by `sudo`
+# Even though brew isn't installed as part of this image, it's fine to add it here as it's reused by multiple ublue images
+sed -Ei "s/secure_path = (.*)/secure_path = \1:\/home\/linuxbrew\/.linuxbrew\/bin/" /etc/sudoers
+
+
+A mettre de côté, il pourrait y avoir des bonnes idées de logiciels CLI à intégrer :
+https://github.com/ublue-os/main/blob/main/packages.json
 
 
 intégrer steam (si diff de perfs en faveur des rpm, et si il est impossible d'avoir une session gamescope en flatpak)
@@ -153,7 +161,7 @@ skopeo copy containers-storage:localhost/ublue-bootc:latest \
 =======================================
 # build offline de l'iso
 Tout simlement avec le script fait par Gemini
-
+NB : une image doit avoir été générée par podamn au préalable
 ========================================
 
 
