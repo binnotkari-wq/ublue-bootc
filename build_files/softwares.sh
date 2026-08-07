@@ -2,11 +2,6 @@
 
 set -ouex pipefail
 
-### Logiciels GUI. weak_deps : on ne veut pas de paquets suggérés supplémentaires.
-dnf5 install -y --setopt=install_weak_deps=False \
-  gnome-shell-extension-dash-to-panel 
-
-
 ### Ajout de Flathub (statique, prêt à l'emploi si besoin plus tard)
 ### https://github.com/ublue-os/main/blob/main/build_files/install.sh
 mkdir -p /etc/flatpak/remotes.d/
@@ -33,9 +28,9 @@ ldconfig
 rm -rf /tmp/llama-cpp.tar.gz /tmp/llama-cpp-extract
 
 
-
 ### Logiciels CLI. weak_deps : on ne veut pas de paquets suggérés supplémentaires.
 dnf5 install -y --setopt=install_weak_deps=False \
+  gnome-shell-extension-dash-to-panel 
   distrobox \
   bat \
   powertop \

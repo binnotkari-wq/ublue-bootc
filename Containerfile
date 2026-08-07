@@ -35,7 +35,7 @@ RUN chmod 755 /etc/scripts/system-update.sh && \
     chmod 755 /etc/scripts/bootc-welcome.sh
     
 RUN chmod 644 /etc/profile.d/10-environment.sh && \
-    chmod 755 /etc/skel/Script.sh
+    chmod 755 /etc/skel/Modèles/Script.sh
 
 RUN dconf update
 
