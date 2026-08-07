@@ -30,7 +30,7 @@ rm -rf /tmp/llama-cpp.tar.gz /tmp/llama-cpp-extract
 
 ### Logiciels CLI. weak_deps : on ne veut pas de paquets suggérés supplémentaires.
 dnf5 install -y --setopt=install_weak_deps=False \
-  gnome-shell-extension-dash-to-panel 
+  gnome-shell-extension-dash-to-panel \
   distrobox \
   bat \
   powertop \
